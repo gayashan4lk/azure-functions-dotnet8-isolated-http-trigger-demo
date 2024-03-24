@@ -1,11 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
-using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
-using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
 using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
-using System.Net;
 using System.Text.Json;
 
 
@@ -25,11 +21,6 @@ namespace Turbine
         }
 
         [Function(nameof(FixTurbine))]
-        [OpenApiOperation(operationId: "Run")]
-        [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name="code", In = OpenApiSecurityLocationType.Query)]
-        [OpenApiRequestBody("application/json", typeof(RequestBodyModel), Description = "JSON request body containing { hours, capacity}")]
-        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string),
-            Description = "The OK response message containing a JSON result.")]
         public async Task<IActionResult> FixTurbine([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequest req)
         {
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();

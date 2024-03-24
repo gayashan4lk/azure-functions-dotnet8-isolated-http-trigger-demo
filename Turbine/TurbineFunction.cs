@@ -24,13 +24,13 @@ namespace Turbine
             _logger = logger;
         }
 
-        [Function("TurbineFunction")]
+        [Function(nameof(FixTurbine))]
         [OpenApiOperation(operationId: "Run")]
         [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name="code", In = OpenApiSecurityLocationType.Query)]
         [OpenApiRequestBody("application/json", typeof(RequestBodyModel), Description = "JSON request body containing { hours, capacity}")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(string),
             Description = "The OK response message containing a JSON result.")]
-        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequest req)
+        public async Task<IActionResult> FixTurbine([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequest req)
         {
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic data = JsonSerializer.Deserialize<RequestBodyModel>(requestBody) ?? throw new InvalidOperationException("request is not valid");
